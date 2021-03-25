@@ -40,3 +40,5 @@ SUM(fc_producto.p_cost) FROM fc_producto,fc_compra WHERE fc_producto.p_id = fc_c
 
 #------------------------------------------productos ft vendidos
 SELECT DISTINCT fc_producto.p_id, fc_producto.p_name, fc_producto.p_brand, fc_producto.p_cost, (SELECT COUNT(*) FROM fc_compra WHERE fc_compra.id_producto = fc_producto.p_id) FROM fc_producto
+
+dasd
