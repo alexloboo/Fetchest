@@ -1,0 +1,42 @@
+bg="#16425B"
+fg='white'
+font=('Helvetica', 18, 'bold')
+
+SELECT fc_producto.p_id, fc_producto.p_name, fc_producto.p_brand, fc_producto.p_cost, (SELECT COUNT(*) 
+FROM fc_compra WHERE c_id = fc_producto.p_id) FROM fc_producto
+
+SELECT AVG(fc_producto.p_cost) FROM fc_producto,fc_compra WHERE fc_producto.p_id = fc_compra.id_producto
+
+SELECT fc_compra.c_id, fc_producto.p_cost FROM fc_producto,fc_compra WHERE fc_producto.p_id = fc_compra.id_producto
+
+#-------------------más frecuente
+SELECT fc_compra.id_cliente,COUNT(fc_compra.id_cliente) AS c FROM `fc_compra` GROUP BY fc_compra.id_cliente ORDER BY c DESC LIMIT 1
+
+SELECT DISTINCT fc_compra.id_producto, fc_producto.p_name, fc_producto.p_brand, fc_producto.p_cost,(SELECT COUNT (fc_compra.id_producto) FROM fc_compra) FROM fc_compra,fc_producto WHERE fc_producto.p_id = fc_compra.id_producto
+
+#-----------------cant de compras x cliente
+SELECT fc_compra.id_cliente ,COUNT(fc_compra.id_producto) FROM `fc_compra` GROUP BY fc_compra.id_cliente ORDER BY COUNT(fc_compra.id_cliente) DESC
+
+#--------------------SUMA DE ID DE PRODUCTO POR COMPRA DE cliente
+SELECT fc_compra.id_cliente, (SELECT fc_client.name FROM fc_client WHERE fc_compra.id_cliente = fc_client.id), SUM(fc_compra.id_producto) FROM `fc_compra` GROUP BY fc_compra.id_cliente ORDER BY COUNT(fc_compra.id_cliente) DESC
+
+SELECT fc_compra.id_cliente, 
+(SELECT fc_client.name FROM fc_client WHERE fc_compra.id_cliente = fc_client.id), 
+SUM(fc_producto.p_cost) 
+FROM fc_compra,fc_producto GROUP BY fc_compra.id_cliente ORDER BY COUNT(fc_compra.id_cliente) DESC
+
+#----------------
+SELECT fc_compra.id_cliente, 
+(SELECT fc_client.name FROM fc_client WHERE fc_compra.id_cliente = fc_client.id), 
+(SELECT SUM(fc_producto.p_cost) FROM fc_producto WHERE fc_compra.id_producto = fc_producto)
+
+FROM fc_compra,fc_producto WHERE fc_producto.p_id = fc_compra.c_id GROUP BY fc_compra.id_cliente
+
+#---------------------------------------suma de compra x cliente
+SELECT fc_compra.id_cliente,
+(SELECT fc_client.name FROM fc_client WHERE fc_compra.id_cliente = fc_client.id),
+SUM(fc_producto.p_cost) FROM fc_producto,fc_compra WHERE fc_producto.p_id = fc_compra.id_producto GROUP BY fc_compra.id_cliente 
+
+
+#------------------------------------------productos ft vendidos
+SELECT DISTINCT fc_producto.p_id, fc_producto.p_name, fc_producto.p_brand, fc_producto.p_cost, (SELECT COUNT(*) FROM fc_compra WHERE fc_compra.id_producto = fc_producto.p_id) FROM fc_producto
